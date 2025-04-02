@@ -1,5 +1,15 @@
+import DocumentList from './components/DocumentList';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 function App() {
-  return <div className="App"></div>;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<DocumentList />} />
+        <Route path="/:documentId" element={<DocumentList />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

@@ -7,6 +7,7 @@
       "esnext"
     ],
     "allowJs": true,
+    "types": ["node"], 
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -18,9 +19,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "*": ["./src/*"]
+    },
+    "baseUrl": "./",
   },
   "include": [
     "src"
-  ]
+, "global.d.ts"  ]
 }
