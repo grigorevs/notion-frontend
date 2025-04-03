@@ -20,7 +20,7 @@ async function fetchData(): Promise<Document[]> {
 async function updateDocumentContent(documentId: string, content: Descendant[]): Promise<void> {
   try {
     const response = await fetch(`${backendUrl}/documents/${documentId}`, {
-      method: 'PATCH',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -38,7 +38,7 @@ async function updateDocumentContent(documentId: string, content: Descendant[]):
 async function updateParentId(documentId: string, parentId: string | null): Promise<void> {
   try {
     const response = await fetch(`${backendUrl}/documents/${documentId}`, {
-      method: 'PATCH',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
