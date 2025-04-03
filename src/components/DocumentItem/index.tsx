@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { BaseElement, createEditor, Descendant } from 'slate';
 import { Slate, Editable, withReact, RenderElementProps } from 'slate-react';
 import { Document } from '../../types/document.type';
@@ -32,24 +32,39 @@ const Element: React.FC<RenderElementProps> = ({ attributes, children, element }
 };
 
 function DocumentItem({ document, allDocuments, onDocumentClick }: DocumentItemProps) {
-  const editor = useMemo(() => withReact(createEditor()), []);
-  const [value, setValue] = useState<Descendant[]>(
-    document.content || [{ type: 'paragraph', children: [{ text: '' }] }],
+  const titleEditor = useMemo(() => withReact(createEditor()), []);
+  const contentEditor = useMemo(() => withReact(createEditor()), []);
+
+  const initialTitle = useMemo<Descendant[]>(
+    () => [{ type: 'paragraph', children: [{ text: document.title || '' }] }],
+    [document.title],
   );
+  const [title, setTitle] = useState<Descendant[]>(initialTitle);
+
+  const initialContent = useMemo<Descendant[]>(
+    () => document.content || [{ type: 'paragraph', children: [{ text: '' }] }],
+    [document.content],
+  );
+  const [content, setContent] = useState<Descendant[]>(initialContent);
 
   const renderElement = useCallback((props: any) => <Element {...props} />, []);
 
-  useEffect(() => {
-    if (document.content !== value) {
-      setValue(document.content || [{ type: 'paragraph', children: [{ text: '' }] }]);
-    }
-  }, [document.content, setValue, value]);
-
-  const handleChange = useCallback(
+  const handleContentChange = useCallback(
     (value: Descendant[]) => {
-      setValue(value);
-      updateDocumentContent(document.id, value).catch((error) => {
+      setContent(value);
+      updateDocumentContent(document.id, { content: value }).catch((error) => {
         console.error('Failed to update content', error);
+      });
+    },
+    [document.id],
+  );
+
+  const handleTitleChange = useCallback(
+    (value: any[]) => {
+      setTitle(value);
+      const titleText = value[0]?.children[0]?.text || '';
+      updateDocumentContent(document.id, { title: titleText }).catch((error) => {
+        console.error('Failed to update title', error);
       });
     },
     [document.id],
@@ -57,10 +72,14 @@ function DocumentItem({ document, allDocuments, onDocumentClick }: DocumentItemP
 
   return (
     <ItemBlock>
-      <h3>{document.title}</h3>
-      <Slate editor={editor} initialValue={value} onChange={handleChange}>
+      <Slate editor={titleEditor} initialValue={title} onChange={handleTitleChange}>
         <Editable readOnly={userRole !== 'admin'} renderElement={renderElement} />
       </Slate>
+
+      <Slate editor={contentEditor} initialValue={content} onChange={handleContentChange}>
+        <Editable readOnly={userRole !== 'admin'} renderElement={renderElement} />
+      </Slate>
+
       <DocumentChildren
         documentId={document.id}
         documents={allDocuments}

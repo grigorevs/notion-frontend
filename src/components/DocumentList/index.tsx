@@ -4,6 +4,7 @@ import { Document } from '../../types/document.type';
 import { fetchData } from '../../api/documentApi';
 import DocumentItem from '../DocumentItem';
 import { ListBlock } from './index.styles';
+import AddDocumentButton from '../AddDocumentButton';
 
 function DocumentList() {
   const [documents, setDocuments] = useState<Document[] | null>(null);
@@ -61,16 +62,19 @@ function DocumentList() {
   }
 
   return (
-    <ListBlock>
-      {documentsToDisplay.map((doc) => (
-        <DocumentItem
-          key={doc.id}
-          document={doc}
-          allDocuments={documents}
-          onDocumentClick={handleDocumentClick}
-        />
-      ))}
-    </ListBlock>
+    <>
+      <ListBlock>
+        {documentsToDisplay.map((doc) => (
+          <DocumentItem
+            key={doc.id}
+            document={doc}
+            allDocuments={documents}
+            onDocumentClick={handleDocumentClick}
+          />
+        ))}
+        <AddDocumentButton />
+      </ListBlock>
+    </>
   );
 }
 

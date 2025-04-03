@@ -17,14 +17,17 @@ async function fetchData(): Promise<Document[]> {
   }
 }
 
-async function updateDocumentContent(documentId: string, content: Descendant[]): Promise<void> {
+async function updateDocumentContent(
+  documentId: string,
+  { content, title }: { content?: Descendant[]; title?: string },
+): Promise<void> {
   try {
     const response = await fetch(`${backendUrl}/documents/${documentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ content }),
+      body: JSON.stringify({ content, title }),
     });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -53,4 +56,23 @@ async function updateParentId(documentId: string, parentId: string | null): Prom
   }
 }
 
-export { fetchData, updateDocumentContent, updateParentId };
+async function addDocument(): Promise<void> {
+  try {
+    const title = 'Новый документ';
+    const response = await fetch(`${backendUrl}/documents`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ title }),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error updating parentId:', error);
+    throw error;
+  }
+}
+
+export { fetchData, updateDocumentContent, updateParentId, addDocument };

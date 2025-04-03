@@ -1,12 +1,14 @@
-import DocumentList from './components/DocumentList';
+import GlobalStyle from './styles/GlobalStyles';
+import MainPage from './pages/MainPage';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
     <BrowserRouter>
+      <GlobalStyle />
       <Routes>
-        <Route path="/" element={<DocumentList />} />
-        <Route path="/:documentId" element={<DocumentList />} />
+        <Route path="/" element={<MainPage />} />
+        <Route path="/:documentId" element={<MainPage />} />
       </Routes>
     </BrowserRouter>
   );
