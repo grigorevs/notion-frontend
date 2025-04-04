@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Document } from '../types/document.type'; // Убедитесь, что путь правильный
+import { Document } from '../types/document.type';
 
 interface DocumentState {
   documents: Document[];

@@ -1,11 +1,17 @@
 import styled from 'styled-components';
 
-export const ItemBlock = styled.span`
-  padding: 10px 20px;
+export const ItemBlock = styled.div`
+  padding-bottom: 10px;
   border: none;
   cursor: pointer;
-  width: 400px;
-  background-color: #e6f0ea;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  border-bottom: 1px solid #ccc;
+
+  @media (min-width: 700px) {
+    width: 600px;
+  }
 `;
 
 export const CodeBlock = styled.pre`
@@ -35,11 +41,18 @@ export const DeleteContainer = styled.div`
 
 export const DeleteButton = styled.button`
   border: none;
-  background-color: #c5d2c7;
   text-align: center;
   cursor: pointer;
 
   &:hover {
-    background-color: #a8b7aa;
+    background-color: #d62404;
+  }
+`;
+
+export const DocumentTitle = styled.h2``;
+
+export const DocumentText = styled.span`
+  div:hover {
+    background-color: #f1f1f1;
   }
 `;

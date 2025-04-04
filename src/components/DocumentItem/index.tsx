@@ -1,13 +1,14 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { createEditor, Descendant } from 'slate';
 import { Slate, Editable, withReact, RenderElementProps } from 'slate-react';
-
 import { updateDocumentContent } from '../../api/documentApi';
 import DocumentChildren from '../DocumentChildren';
 import {
   CodeBlock,
   DeleteButton,
   DeleteContainer,
+  DocumentText,
+  DocumentTitle,
   HeadingOne,
   ItemBlock,
   Paragraph,
@@ -42,7 +43,10 @@ function DocumentItem({ document, allDocuments, onDocumentClick }: DocumentItemP
   );
 
   const initialContent = useMemo<Descendant[]>(
-    () => document.content || [{ type: 'paragraph', children: [{ text: '' }] }],
+    () =>
+      document.content.length
+        ? document.content
+        : [{ type: 'paragraph', children: [{ text: '' }] }],
     [document.content],
   );
   const [title, setTitle] = useState<Descendant[]>(initialTitle);
@@ -77,15 +81,23 @@ function DocumentItem({ document, allDocuments, onDocumentClick }: DocumentItemP
 
   return (
     <ItemBlock>
-      <DeleteContainer onClick={handleDelete}>
-        <DeleteButton>Удалить</DeleteButton>
-      </DeleteContainer>
-      <Slate editor={titleEditor} initialValue={title} onChange={handleTitleChange}>
-        <Editable readOnly={userRole !== 'admin'} renderElement={renderElement} />
-      </Slate>
-      <Slate editor={contentEditor} initialValue={content} onChange={handleContentChange}>
-        <Editable readOnly={userRole !== 'admin'} renderElement={renderElement} />
-      </Slate>
+      {userRole === 'admin' && (
+        <DeleteContainer onClick={handleDelete}>
+          <DeleteButton>Удалить</DeleteButton>
+        </DeleteContainer>
+      )}
+
+      <DocumentTitle>
+        <Slate editor={titleEditor} initialValue={title} onChange={handleTitleChange}>
+          <Editable readOnly={userRole !== 'admin'} renderElement={renderElement} />
+        </Slate>
+      </DocumentTitle>
+
+      <DocumentText>
+        <Slate editor={contentEditor} initialValue={content} onChange={handleContentChange}>
+          <Editable readOnly={userRole !== 'admin'} renderElement={renderElement} />
+        </Slate>
+      </DocumentText>
 
       <DocumentChildren
         documentId={document.id}

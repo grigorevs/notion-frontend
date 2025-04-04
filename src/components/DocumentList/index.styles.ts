@@ -6,6 +6,6 @@ export const ListBlock = styled.ul`
   cursor: pointer;
   display: flex;
   gap: 30px;
-  flex-wrap: wrap;
-  justify-content: start;
+  flex-direction: column;
+  align-items: center;
 `;
