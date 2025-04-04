@@ -43,9 +43,11 @@ export const DeleteButton = styled.button`
   border: none;
   text-align: center;
   cursor: pointer;
+  border-radius: 5px;
 
   &:hover {
     background-color: #d62404;
+    color: #fff;
   }
 `;
 
@@ -55,4 +57,21 @@ export const DocumentText = styled.span`
   div:hover {
     background-color: #f1f1f1;
   }
+`;
+
+export const AddContainer = styled.div`
+  margin-top: 10px;
+  text-align: center;
+`;
+
+export const AddButton = styled.button`
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
 `;

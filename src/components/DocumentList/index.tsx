@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Document } from '../../types/document.type';
 import DocumentItem from '../DocumentItem';
 import { ListBlock } from './index.styles';
-// import AddDocumentButton from '../AddDocumentButton';
 import useStore from '../../store';
 
 function DocumentList() {
@@ -58,7 +57,6 @@ function DocumentList() {
             onDocumentClick={handleDocumentClick}
           />
         ))}
-        {/* <AddDocumentButton /> */}
       </ListBlock>
     </>
   );
