@@ -26,3 +26,20 @@ export const Paragraph = styled.p`
 `;
 
 export const Text = styled.span``;
+
+export const DeleteContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  height: 22px;
+`;
+
+export const DeleteButton = styled.button`
+  border: none;
+  background-color: #c5d2c7;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #a8b7aa;
+  }
+`;

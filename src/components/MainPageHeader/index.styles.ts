@@ -11,6 +11,5 @@ export const Header = styled.header`
 
 export const HeaderTitle = styled.p`
   font-size: 30px;
-  color: #855a09;
   font-weight: bold;
 `;

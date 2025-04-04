@@ -1,21 +1,6 @@
 import { Descendant } from 'slate';
-import { Document } from '../types/document.type';
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
-
-async function fetchData(): Promise<Document[]> {
-  try {
-    const response = await fetch(`${backendUrl}/documents`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    throw error;
-  }
-}
 
 async function updateDocumentContent(
   documentId: string,
@@ -57,6 +42,9 @@ async function updateParentId(documentId: string, parentId: string | null): Prom
 }
 
 async function addDocument(): Promise<void> {
+  const path = window.location.pathname;
+  const id = path.substring(1);
+
   try {
     const title = 'Новый документ';
     const response = await fetch(`${backendUrl}/documents`, {
@@ -64,7 +52,7 @@ async function addDocument(): Promise<void> {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ title }),
+      body: JSON.stringify({ title: title, parentId: id.length ? id : null }),
     });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -75,4 +63,22 @@ async function addDocument(): Promise<void> {
   }
 }
 
-export { fetchData, updateDocumentContent, updateParentId, addDocument };
+async function deleteDocument(documentId: string): Promise<void> {
+  try {
+    const response = await fetch(`${backendUrl}/documents/${documentId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: documentId }),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error deleting document:', error);
+    throw error;
+  }
+}
+
+export { updateDocumentContent, updateParentId, addDocument, deleteDocument };

@@ -1,23 +1,21 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { BaseElement, createEditor, Descendant } from 'slate';
+import { createEditor, Descendant } from 'slate';
 import { Slate, Editable, withReact, RenderElementProps } from 'slate-react';
-import { Document } from '../../types/document.type';
+
 import { updateDocumentContent } from '../../api/documentApi';
 import DocumentChildren from '../DocumentChildren';
-import { CodeBlock, HeadingOne, ItemBlock, Paragraph } from './index.styles';
+import {
+  CodeBlock,
+  DeleteButton,
+  DeleteContainer,
+  HeadingOne,
+  ItemBlock,
+  Paragraph,
+} from './index.styles';
+import useStore from '../../store';
+import { CustomElement, DocumentItemProps } from './index.types';
 
 const userRole = process.env.REACT_APP_USER_ROLE;
-
-interface DocumentItemProps {
-  document: Document;
-  allDocuments: Document[];
-  onDocumentClick: (documentId: string) => void;
-}
-
-interface CustomElement extends BaseElement {
-  type: 'paragraph' | 'heading-one' | 'code-block';
-  children: any;
-}
 
 const Element: React.FC<RenderElementProps> = ({ attributes, children, element }) => {
   const el = element as CustomElement;
@@ -32,6 +30,9 @@ const Element: React.FC<RenderElementProps> = ({ attributes, children, element }
 };
 
 function DocumentItem({ document, allDocuments, onDocumentClick }: DocumentItemProps) {
+  const deleteDocumentFromStore = useStore(
+    (state: { deleteDocument: any }) => state.deleteDocument,
+  );
   const titleEditor = useMemo(() => withReact(createEditor()), []);
   const contentEditor = useMemo(() => withReact(createEditor()), []);
 
@@ -39,12 +40,12 @@ function DocumentItem({ document, allDocuments, onDocumentClick }: DocumentItemP
     () => [{ type: 'paragraph', children: [{ text: document.title || '' }] }],
     [document.title],
   );
-  const [title, setTitle] = useState<Descendant[]>(initialTitle);
 
   const initialContent = useMemo<Descendant[]>(
     () => document.content || [{ type: 'paragraph', children: [{ text: '' }] }],
     [document.content],
   );
+  const [title, setTitle] = useState<Descendant[]>(initialTitle);
   const [content, setContent] = useState<Descendant[]>(initialContent);
 
   const renderElement = useCallback((props: any) => <Element {...props} />, []);
@@ -70,12 +71,18 @@ function DocumentItem({ document, allDocuments, onDocumentClick }: DocumentItemP
     [document.id],
   );
 
+  const handleDelete = useCallback(() => {
+    deleteDocumentFromStore(document.id);
+  }, []);
+
   return (
     <ItemBlock>
+      <DeleteContainer onClick={handleDelete}>
+        <DeleteButton>Удалить</DeleteButton>
+      </DeleteContainer>
       <Slate editor={titleEditor} initialValue={title} onChange={handleTitleChange}>
         <Editable readOnly={userRole !== 'admin'} renderElement={renderElement} />
       </Slate>
-
       <Slate editor={contentEditor} initialValue={content} onChange={handleContentChange}>
         <Editable readOnly={userRole !== 'admin'} renderElement={renderElement} />
       </Slate>
